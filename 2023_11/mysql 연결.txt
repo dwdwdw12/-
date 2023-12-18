@@ -1,0 +1,5 @@
+mysql 연결
+1. pom.xml >dependency에 mysql-connector-j 추가
+
+2. root-eontext : hikari config 빈에서 jdbc url 수정
+    <property name="jdbcUrl" value="jdbc:log4jdbc:mysql://localhost:3306/ezen(커넥션 이름)"></property>

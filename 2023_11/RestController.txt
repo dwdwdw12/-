@@ -1,0 +1,34 @@
+@RestController
+1. @RestController = @Controller + @RestponseBody. 
+   화면 자체가 아니라 데이터 자체를 전송하는 방식.
+   메서드는 객체를 반환하며, 반환된 객체는 화면상에 표시됨. 다음의 타입들이 존재함
+
+   a. @GetMapping(value = "getText", produces = "text/plain; charset=utf-8")
+	-produces에는 content-type이 들어감.
+   b. @GetMapping(value = "/getSample", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	-MediaType 이하에는 자료 타입이 들어감(JSON, XML).
+   c. VO 객체로 반환할 경우, 해당 url로 접속시, xml 방식으로 출력. url 뒤에 .json을 붙이면 json 타입으로 출력
+   d. return IntStream.range(1, 10).mapToObj(i->new SampleVO(i, i+"First", i+"Last"))
+		.collect(Collectors.toList());
+	-참고) IntStream에 1부터 10까지의 숫자가 들어감. 각 숫자를 VO에 대응시켜 list에 저장.
+   e. Map을 생성한 뒤, map 형태로 반환할 수도 있음. 키와 값(vo 객체도 가능)이 출력됨.
+   f. @GetMapping(value = "/check", params= {"height", "weight"})	//param은 반드시 전달해야 함
+	SampleVO vo = new SampleVO(0,""+height, ""+weight);
+	ResponseEntity<SampleVO> result = null;		
+	result = ResponseEntity.status(HttpStatus.OK).body(vo);	//ok, bad_gateway 등이 존재.
+	return result;
+     - ResponseEntity : 데이터와 함께, HTTP 헤더의 상태메세지를 같이 전달. 에러 메세지도 전달 가능.
+		     데이터를 전달받는 입장에서, 확실하게 결과를 알 수 있음
+   g. @GetMapping("/product/{cat}/{pid}")
+	public String[] getPath(@PathVariable("cat") String cat, @PathVariable("pid") String pid){
+		return new String[] {"category : " + cat, "productId : " + pid
+	}
+     - @PathVariable 생략시 null값이 전달됨. 괄호 안의 부분은 생략 가능하나, 써주는 것도 좋음.
+     - http://localhost:8081/sample/product/cat/1234.json 과 같이 접근 가능.
+   h. @PostMapping("/ticket")
+	public Ticket convert(@RequestBody Ticket ticket){
+		return ticket;	
+	}
+     -postman 사용하기. body>row>json 선택, {"tno" : 10, "owner" : "aaa", "grade" : "B"} 입력.
+     -변수명, 타입이 일치하지 않으면 error 발생.
+     -@RequestBody 생략시 null값 전송

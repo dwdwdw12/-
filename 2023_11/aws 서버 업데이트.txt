@@ -1,0 +1,175 @@
+인스턴스 시작
+키페어 생성(ppk 파일)
+스토리지 -> 30gb까지 무료
+
+모든 인스턴스 보기
+
+*탄력적 IP : 고정 IP, ec2 사용 후에는 제거해주기(미사용시 과금).
+	삭제 = 탄력적 IP 주소 릴리스
+
+ec계정 생성
+putty 접속 - 퍼플릭 ipv4 주소
+connection>SSH>Auth>Credentials - 키페어 등록
+//접속 후 로그인
+login as : ubuntu
+
+clear 화면 정리
+pwd 현재경로
+
+//관리자 권한으로 업데이트 목록 찾기 및 업그레이드(나=ubuntu)
+sudo apt-get update
+sudo apt-get upgrade
+//자바 11 찾아보기
+sudo apt-cache search java11
+//자바 11 설치
+sudo apt-get install openjdk-11-jdk
+분홍색 화면 : tab>enter
+
+//자바 버전 확인
+java -version
+javac -version
+which java 	<- java 설치 위치
+readlink -f /usr/bin/java	<-bin 위치
+
+//환경설정
+sudo vi /etc/profile 
+i 또는 a : insert
+dd -> 줄 삭제
+
+//환경설정 java, tomcat 등록
+export CATALINA_HOME=/home/tomcat
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASS_PATH=$JAVA_HOME/lib:$CLASS_PATH
+
+//입력창에서 아래로 빠져나감
+shift + : 
+q! 그냥 빠져나옴
+wq! 저장하고 빠져나옴
+
+//pwd -> home/ubuntu
+cd .. -> /home으로 빠져나감
+
+//디렉터리 생성
+sudo mkdir /home/tomcat
+ls -> 파일목록 (ls -a ->숨긴 파일도 보기)
+//tomcat 폴더로 이동
+cd tomcat (또는 cd /home/tomcat)
+
+//tomcat9 다운로드(압축파일)
+sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.83/bin/apache-tomcat-9.0.83.tar.gz
+ls로 확인해보기
+
+//압축파일 풀기
+sudo tar xvfz apache-tomcat-9.0.83.tar.gz
+ll로 확인해보기(권한+파일/폴더)
+
+//압축파일 삭제
+sudo rm 파일명 -> sudo rm apache-tomcat-9.0.83.tar.gz <- 
+sudo rm -rf 폴더명 : 강제로 삭제
+
+//환경변수 확인
+source /etc/profile		-> 스크립트 파일 수정 후 수정된 값을 바로 적용.
+echo $CATALINA_HOME	-> 환경변수 확인, /home/tomcat 출력
+
+sudo apt install net-tools
+//ip 관련 정보 확인
+netstat -nlpt
+
+cd apache-tomcat-9.0.83
+//접근 권한부여 및 bin 파일 이동
+sudo chmod -R 777 /home/tomcat/apache-tomcat-9.0.83/bin
+cd bin
+
+//톰캣 실행
+sudo ./startup.sh
+
+//aws ec2 보안그룹-인바운드 규칙 편집. 8080포트 추가
+로컬ip:8080으로 접속, tomcat 화면 뜨는지 확인
+
+//페이지 등록을 위한 권한 부여
+sudo chmod -R 777 /home/tomcat/apache-tomcat-9.0.83
+
+//파일은 webapp에 넣을 예정
+cd ..
+cd webapps
+
+//mysql 설치
+cd /
+cd home
+sudo apt install -y mysql-server
+
+//mysql 버전 확인
+mysql --version    .............현재 8.0.35 버전
+
+//mysql 관리자 접속
+sudo mysql -u root -p
+show databases;
+//DB 생성 및 사용
+create database testdb;
+use testdb;
+
+//유저 생성 및 권한 부여
+create user 'test2'@'%' identified by '1234';
+grant all privileges on *.* to 'test2'@'%';
+
+
+//테이블 생성
+create table test(
+	id int primary key auto_increment,
+    title varchar(50),
+    content varchar(200)
+);
+//데이터 입력 및 확인
+insert into test(title, content) values('테스트 제목1', 'test content1');
+insert into test(title, content) values('테스트 제목2', 'test content2');
+commit;
+select * from test;
+
+//빠져나오기
+exit			...bye 출력
+
+//보안그룹-3306 추가
+유형-MYSQL/Aurora
+
+netstat -nlpt  	->3306 확인
+
+//spring - 원하는 project 선택.
+project 우클릭 > export > web > WAR file
+저장시 파일명 뒤에 .war 붙이기(압축파일 형태). 경로는 편의상 키페어가 있는 위치와 동일하게
+
+//주소창 간단히 만들기
+//실행중인 톰캣 종료
+./shutdown.sh
+cd ..
+
+//설정 폴더로 접속, server.xml 접속
+cd conf
+sudo vi server.xml
+
+//아래로 방향키 오래 이동(95~98%정도). <Host name ="localhost"...> 아래에 다음 부분 추가.
+<Context docBase="test2" path="/" reloadable="true"/>
+
+//톰캣 다시 시작(netstat -nlpt로 8080 확인, 안되면 톰캣 다시 종료 후 다시 시작)
+cd ../bin
+./startup.sh
+
+//FileZilla 실행
+파일>사이트 관리자>새사이트 클릭
+프로토콜 : SFTP SSH 선택, 호스트 : ipv4 주소 입력, 포트 : 비워두기
+사용자: ubuntu, 키파일 : ppk 파일 선택
+
+//연결 확인 후, 로컬사이트(본인) -> 리모트사이트(ubuntu) - webapps 아래에 war 파일 옮기기(드래그)
+	(경로: /home/tomcat/apache-tomcat-9.0.83/webapps)
+//새로고침하면 war 파일의 압축이 해제됨
+
+//아래 주소와 같이 접속가능(ipv4주소:포트번호/프로젝트명/mapping해놓은 주소)
+http://43.202.185.189:8080/test333/hello
+
+//탄력적 IP 삭제(연결해제+릴리스)
+//인스턴스 > 인스턴스 상태 > 인스턴스 종료
+//키페어 삭제
+//보안그룹 삭제
+//EC2 대시보드 > 화면 확인해보기
+
+//ppk파일 삭제

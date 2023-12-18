@@ -1,0 +1,46 @@
+1. 스프링의 특징 : 경량컨테이너/제어 역행(IOC)/의존성 주입(DI)/ 관점지향 프로그래밍(AOP)
+
+2. 제어 역행/역전 : 스프링 컨테이너가 필요에 따라 개발자 대신 Bean들을 관리(제어)해주는 행위. 의존성 주입의 상위 개념.
+
+3. 의존성 주입 : 어떤 객체가 사용하는 의존 객체를 직접 만들어 사용하는게 아니라, 주입 받아 사용하는 방법. new를 사용해 객체를 만드는 방식 대용.
+	-3가지 방법이 존재
+	-생성자 주입 : applicationContext.xml에서 <bean>에 <constructor-arg> 태그로 값만 지정
+		      클래스 생성자에 @Autowired 사용
+	-setter 주입 : applicationContext.xml에서 <bean>에 <property> 태그로 이름과 값을 지정
+		      setter에 @Autowired를 사용.
+	-필드 주입 : 필드에 바로 @Autowired를 사용.
+    의존성 주입을 활용하면, 불변객체를 생성할 수 있고, 순환참조를 막을 수 있으며, null pointer exception을 방지할 수 있음.
+
+4. AOP(Aspect-Oriented Programming) : 핵심기능만 남기고, 공통 관심사를 따로 분리. 
+   공통 기능을 모아서 핸들링(예시: 예외처리, 동작시간 계산 등)
+
+5. return result ==1; => true/false값 바로 반환 가능
+
+6. 3 계층 구조(3 tier architecture)
+	-Presentation layer : 
+		HTTP request를 받아, controller에서 model을 호출. 
+		model의 결과를 view에 전달받아 response로 내보냄
+	-Business layer : 
+		model. 다른 두 계층과 통신. 
+		service 클래스가 위치. service단은 확장성을 위해 만듦. 
+	-Data access layer : DAO가 위치. DB와 상호작용
+
+7. PRG(Post-Redirect-Get) 방식
+   -post 방식으로 온 요청에 대하여 get 방식의 웹페이지로 redirect 시키는 것.
+   -새로고침을 할 때, 글 작성 및 주문이 중복되어 처리되는 현상을 방지하기 위한 방식
+
+8. el 태그(${...}) 대신 <c:out>을 사용하는 이유
+   -XSS(크로스 사이트 스크립팅)를 방어하기 위해.
+   -<c:out>은 excapeXml 옵션(<, >, &, ', ''과 같은 HTML문자가 스크립트를 실행시키지 않도록 무시하는 기능)이 내장되어 있음(default가 true). 옵션을 false로 돌릴경우, el 태그와 동일.
+   -<c:out value="${board.bno}"/>
+
+9. B-트리 구조(인덱스의 자료 구조)
+   -기본적으로 트리 구조. 값을 추가할 때 트리가 분화됨.
+   -기본키 설정시 자동으로 생성. 저장에 필요한 공간이 있음.
+   -조회/검색 속도가 향상
+   -수정/삭제 시 자료 구조가 변형됨. 수정/삭제가 빈번할 경우, 성능에 부담이 갈 수 있음
+   -정렬시, hint를 부여하여, 인덱스를 활용할 수 있음.
+
+10. B+ 트리
+   -B-트리와 유사하나, 데이터가 바닥에 깔림. 검색 속도가 더욱 향상된 방식.
+

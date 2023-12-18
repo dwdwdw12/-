@@ -1,0 +1,34 @@
+오라클 검색-동적 쿼리
+1. 꺾쇠가 들어간 경우, <![CDATA[ ... ]]> 사용하여 문제 상황을 예방.
+
+2. <where>...</where> : 이어지는 쿼리가 true인 경우, where이 입력됨
+   -<trim prefix="WHERE">로 입력할 수 있음.
+
+3. <trim>...</trim> 
+   a. prefix="(" : 이어지는 구문이 시작될 때, 앞에 ( 를 입력함 
+   b. suffix="and" : 이어지는 구문이 마무리되고, 그 구문의 뒷부분에 and를 추가함.
+   c. prefixOverrides="or" : 실행될 쿼리의 가장 앞에 or 이 있으면 or을 지워줌.
+	prefixOverrides="AND |OR " : “AND”나 “OR”로 시작한다면 그 “AND”나 “OR”를 지움
+   d. suffixOverrides="," : 실행될 쿼리의 맨 마지막에 , 가 있으면 , 를 지워줌.
+
+4. foreach문을 활용해, 상황을 나열할 수 있음. 
+   a. collection="map" index="key" item="val" : map 자료형을 이용한 방식.
+   b. collection="typeArr" item="type" : 배열을 사용한 방식.
+   c. separator="or" : 하위 구문들 간의 구분자로 or을 사용
+   d. open="(" close=")"> : 하위 구문들의 시작과 끝에 (, )를 삽입.
+
+5. if문을 사용해, 조건에 맞는 경우만 쿼리문에 포함시킬 수 있음.
+   <if test="key=='T'.toString()">
+	title like #{val}
+   </if>	
+
+6. ... like '%' || #{keyword} || '%'
+   해당 단어를 포함하는 모든 데이터를 검색.
+  
+7. 반복되는 부분은 따로 빼내서 재활용가능.
+   a. <sql id="criteria">
+	<trim prefix="(" suffix=") and" >...내용...</trim>
+      </sql>
+   b. 내용을 집어넣고 싶은 곳에, 다음과 같이 입력. id값 위와 같이 맞춰주기
+	<include refid="criteria"></include>
+  

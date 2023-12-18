@@ -1,0 +1,144 @@
+*sts 설치
+1. 원하는 버전 설치(3버전->framework, 4버전->springboot 전용)
+2. lombok 실행, IDE 지정(STS.exe)	-> 해당 폴더에 lombok.jar 생성되었는지,
+				    STS.ini에 lombok 설정이 추가되었는지 확인
+
+*sts 실행, window-preference 수정
+1. colors and fonts - basic - text font - edit ->consolas, 폰트크기 지정
+2. enc 검색. encoding utf-8로 변경(5군데)
+(spring legacy project 생성이 안 될 경우)
+(3). spring 실행 경로 - metadata - plugins - org.eclipse.e4.workbench - workbench.xml 삭제
+4. server - rentime enbironment -> tomcat 9.0 추가, 경로 지정
+5. installed JRE -> 자바 버전 확인(현재 11버전)
+	cmd 실행, java -version 으로 확인가능. 
+	필요하다면 내PC - 속성 - 고급설정 - 환경변수 - 시스템변수 - java-Home - 설치된 자바 버전으로 변경
+6. java - compiler - compiler compliance level -> 설치된 자바 버전과 일치하는지 확인
+7. window - web browser 수정(default->chrome/edge)
+
+*프로젝트 생성시
+1. spring legacy project 생성
+2. spring MVC project 선택
+3. 'next'가 비활성 상태일 경우, configure templates - 3개의 설정 중에, spring defaults만 남기고 나머지 삭제
+
+*프로젝트 생성 이후(항상 실행)
+1. 프로젝트 우클릭 - properties 
+	- java 1.6->11버전으로 수정 
+	-runtime - tomcat 추가
+(2.) 필요한 경우, server-port 번호 바꾸기(기본 8080), module-path 수정
+3. pom.xml 수정
+	a) java-version 수정(1.6->11) : 총 3군데(properties, maven.plugins).
+	b) junit : version 4.7->4.12 변경
+	c) log4j 버전 : 1.2.15 -> 1.2.17 수정, <exclusions>...</exclusons>, <scope> 모두 삭제
+      <dependencies> 내부에, maven repository를 참조하여 
+	d) lombok 추가
+	e) spirng-test 추가
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+	f) ojdbc8 추가
+	g) HikariCP 추가
+	h) mybatis와 mybatis-spring 추가	
+	i) spring-tx와 spring-jdbc 추가. transaction.
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+	j) log4j2 추가
+		<dependency>
+		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
+		    <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
+		    <version>1.16</version>
+		</dependency>     
+	l) servlet-api 수정
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>			//2.5->3.1.0
+		</dependency>
+	j) jackson-databind 추가 : json 취급
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.13.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.dataformat</groupId>
+		    <artifactId>jackson-dataformat-xml</artifactId>
+		    <version>2.13.3</version>
+		</dependency>
+	k) commons-fileupload 추가	: 파일 업로드
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.3.3</version>
+		</dependency>
+	l) gson 추가 : json 다루고 싶을 때
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.10.1</version>
+		</dependency>
+	m) aspectj-aspectjweaver 추가. aspectjrt 아래(원래 포함)에.
+		<dependency>
+		    <groupId>org.aspectj</groupId>
+		    <artifactId>aspectjweaver</artifactId>
+		    <version>${org.aspectj-version}</version>
+		</dependency>
+		+)상단의 properties에 버전 수정. <org.aspectj-version>1.9.0</org.aspectj-version>
+	n) h2 DB 추가. 필요하다면. 아래에 입력하는 버전을 실제 사용하는 h2의 버전과 맞춰주기
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>2.2.222</version>
+		</dependency>
+
+3.5. WEB-INF>web.xml 한글 설정
+	<!-- 한글설정 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class> org.springframework.web.filter.CharacterEncodingFilter
+		</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>	<!-- 한글설정 END -->
+
+4. HikariCP 관련 설정(root-context.xml)
+a) root-context > Namespaces > context 체크
+   <context:component-scan base-package="패키지명"></context:component-scan>
+b) <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>		
+
+	<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
+	<property name="username" value="book_ex"></property>
+	<property name="password" value="book_ex"></property>
+    </bean>
+		
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	<constructor-arg ref="hikariConfig"></constructor-arg>
+    </bean>
+
+5. Junit test 설정
+a) @RunWith(SpringJUnit4ClassRunner.class)
+   @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
+   @Log4j	//기록을 남길 때 사용
+b) 필드에 @Autowired를 사용해 root-context로부터 의존성을 주입받음
+c) @Test 를 사용해 junit test를 진행

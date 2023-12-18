@@ -1,0 +1,15 @@
+1. a) Spring Security는 기본적으로 인증 절차를 거친 후에 인가 절차를 진행하며, 인가 과정에서 해당 리소스에 접근 권한이 있는지 확인하게 된다. 
+   b) Spring Security에서는 이러한 인증과 인가를 위해 Principal을 아이디로, Credential을 비밀번호로 사용하는 Credential 기반의 인증 방식을 사용한다. 
+
+   c) Principal(접근 주체) : 보호받는 Resource에 접근하는 대상
+      Credential(비밀번호) : Resource에 접근하는 대상의 비밀번호
+
+2. CustomUserDetailService의 loadUserByUsername 메서드는 username에 일치하는 vo 객체를 찾은 뒤, 이를 CustomUser 객체의 생성자에 집어넣는다.
+
+3. security-context.xml에서, <security:authentication-manager>로 customUserDetailService를 지정하였고, 이제부터는 로그인 과정에서 CustomUserDetailService가 동작하게 된다. 
+
+4. User를 상속받는 CustomUser는, VO 객체를 받아 CustomUser 객체로 반환하는데, 이것이 Spring Security에서 principal로 사용된다.
+
+5. 반환된 CustomUser 객체는, jsp에서 아래와 같이 사용된다.
+	<sec:authentication property="principal" var="pinfo"/>
+   이 방식으로, 접속한 유저의 정보를 확인하여, 접근 가능한 컨텐츠를 제한할 수 있다.

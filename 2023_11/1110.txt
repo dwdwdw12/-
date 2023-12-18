@@ -1,0 +1,30 @@
+1. controller에서 로직이 같은 메서드는 중괄호를 이용해 하나로 묶을 수 있음
+	@GetMapping({"/get", "/modify"})
+
+2. jquery($(선택자).동작함수();의 꼴)를 이용하여 submit 버튼의 동작을 지정해 줄 수 있다.
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		var formObj = $("form");
+		
+		$('button').on("click", function(e){
+			
+			e.preventDefault();	
+			
+			var operation = $(this).data("oper");	
+			
+			console.log(operation);
+			
+			if(operation === 'remove'){ 
+				formObj.attr("action", "/member/remove");	
+			} else if(operation === 'list'){
+				formObj.attr("action", "/member/list").attr("method", "get");
+				formObj.empty();
+			}
+			
+			formObj.submit();
+			
+		});
+		
+	});
+</script>

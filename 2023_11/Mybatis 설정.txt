@@ -1,0 +1,79 @@
+mybatis 연결 설정
+1. pom.xml에 mybatis와 mybatis-spring dependency 추가
+
+2. mybatis-config에 연결정보 입력(아래 참조)
+
+3. 메인 클래스에 아래 부분 입력
+	String resource = "com/ezen/mybatis/project/mybatis-config.xml";	//연결정보를 입력한 xml 파일경로
+	InputStream inputStream = Resources.getResourceAsStream(resource);
+	SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+    import 경로가 org.apache.ibatis... 인지 학인하기.
+
+4. MapperInterface.java와 MapperInterface.xml 추가
+   MapperInterface.java에서는 메서드를 선언함
+   MapperInterface.xml에서는 sql문을 작성 및 매핑(아래 참고)
+
+5. 메인클래스에서 작업 수행
+	SqlSession session = sqlSessionFactory.openSession(true);		//DB에 세션 연결
+
+	MapperInterface mapper = session.getMapper(MapperInterface.class); //MapperInterface에 매퍼 설정
+	MemberVO mVo = mapper.selectOne(00002)			//메서드 사용
+	...
+
+
+*mybatis-config
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+        <property name="username" value="book_ex"/>
+        <property name="password" value="book_ex"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="com/ezen/mybatis/project/MapperInterface.xml"/>	// .이 아니라 /로 구분
+  </mappers>
+</configuration>
+
+*MapperInterface.xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezen.mybatis.project.MapperInterface">	//인터페이스 경로																			<!-- select문은 resultType 필수 -->
+	<select id="selectOne"  parameterType="int" resultType="com.ezen.mybatis.project.MemberVO" >								<!-- 반환타입도 전체 경로 써주기 -->
+		select * from mybatis where id = #{id}
+	</select>
+	  
+	<!-- id에 MapperInterface.java의 메서드명 입력 --><!-- 이 부분은 parameterType 생략해도 동작 -->
+	<insert id="insertMember" parameterType="com.ezen.mybatis.project.MemberVO">
+	      insert into mybatis (id, name, phone, address) values (
+	        #{id}, #{name}, #{phone}, #{address}
+	      )
+	</insert>
+
+	<delete id="deleteMember">
+		delete from mybatis where id = #{id}
+	</delete>
+	
+	<update id="updateMember">
+	  update mybatis set
+	    name = #{name},
+	    phone = #{phone},
+	    address = #{address}
+	  where id = #{id}
+	</update>
+	
+	<select id="selectAll" resultType="com.ezen.mybatis.project.MemberVO">
+		select * from mybatis
+	</select>		
+
+</mapper>

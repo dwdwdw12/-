@@ -1,0 +1,29 @@
+Mybatis 설정2
+1. pom.xml에 mybatis, mybatis-spring 추가
+
+2. mapper 패키지와 인터페이스(TimeMapper.java)를 작성
+
+3. resources에 위 클래스와 같은 경로로 폴더를 생성하고, 같은 이름으로 xml(TimeMapper.xml) 생성
+
+4. root-context > Namespaces > mybatis-spring 체크하기
+	<mybatis-spring:scan base-package="org.zerock.mapper"/> //매퍼 패키지를 입력
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>	//sqlSessionFactory 설정하기
+
+5. 단위 테스트 실행, 결과 확인
+
+*TimeMapper.xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.TimeMapper">
+									
+	<select id="getTime2" resultType="string" >		<!-- String 소문자로 쓰기 -->
+		select sysdate from dual
+	</select>
+		
+</mapper>
+

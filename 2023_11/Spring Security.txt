@@ -1,0 +1,29 @@
+Spring Security. 
+https://velog.io/@hope0206/Spring-Security-%EA%B5%AC%EC%A1%B0-%ED%9D%90%EB%A6%84-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EC%97%AD%ED%95%A0-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0
+
+
+
+-----------
+1. a) WEB-INF>spring>spring bean configuration file 생성(security-context.xml)
+   b) Namespaces > security 체크
+   c) beans > xsi:schemaLocation 수정 
+
+2. web.xml > filter 설정하기(spring security 관련)
+
+3. <security:http> 추가
+   a) <security:http> 아래 <security:intercept-url>에서 pattern="경로", access="권한" 추가(permitAll, hasRole('ROLE_ADMIN'))	...대문자로 쓰기
+   b) controlller와 로그인/로그아웃 jsp 생성하기
+   c) <security:form-login login-page="/customLogin"/>	로그인 페이지 지정 가능
+   
+   d) 로그아웃 실패시의 동작을 정의할 클래스 작성(AccessDeniedHandler를 상속받아야 함)
+   e) 로그아웃 빈 추가(태그 밖)
+   - <bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
+   f) <security:access-denied-handler ref="customAccessDenied"> 
+   - 로그아웃 페이지 지정 가능(페이지를 redirect).
+
+4. <security:authentication-manager> 추가
+   a) <security:authentication-provider> 추가
+   b) <security:user-service > 입력 후, 직접 name과 pw를 입력하는 방식
+	- <security:user name="admin" password="{noop}admin" authorities="ROLE_MEMBER, ROLE_ADMIN"/>
+   c) DB를 이용하는 방식(hikari cp 관련 설정 필요)
+	- <security:jdbc-user-service data-source-ref="dataSource"/>

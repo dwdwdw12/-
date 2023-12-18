@@ -1,0 +1,22 @@
+오라클 페이징 처리
+1. rownum을 활용. 
+   -select rownum, email from employees where rownum>10; 
+	아무 값도 출력되지 않음. rownum은 고정된 값이 아니라, 정렬시에 생성됨
+	1번부터 배정되므로, 10보다 큰 값을 찾을 수 없음.
+   -select email 
+   	 from (select rownum as rm, email from employees) where rm>10 and rm<20; 
+	위와 같이 서브쿼리 활용하기. rownum에 별칭을 지정해 줌에 유의.
+
+2. hint 사용
+   -정렬 시에 속도를 빠르게 하기 위한 방법 중 하나. 정렬에 참조할 방식을 강제로 지정.
+   -select /*+ index_desc(tbl_board pk_board) */ * from tbl_board where bno > 0;
+   -/*+ 보통 인덱스 사용*/ : 왼쪽의 형식이며, 힌트에 문제가 있을 경우, 에러가 표시하거나 중단되지 않고, 나머지 쿼리문을 실행함에 유의.
+
+3. domain/vo/dto 패키지에 Criteria, PageDTO 클래스를 생성.
+   -Criteria.java : 현재 페이지와 page 당 표시할 데이터의 개수를 표시하기 위한 dto.
+	         검색 조건과 검색 내용을 전달하는 데에도 활용됨.
+   -PageDTO.java : li 태그에 표시할 첫 페이지, li 태그에 표시할 끝 페이지(보통 10 단위), prev버튼, next 버튼을 표시하기 위한 dto. 끝 페이지가 실제 데이터의 마지막 페이지보다 큰 경우에, 빈 페이지가 발생하게 되므로, 조건문을 사용해 끝을 지정할 필요가 있다.
+
+4. <li class="page-item ${pageMaker.cri.pageNum==num ? "active" : ""}" >
+   -활성화될 페이지를 간단한 조건식을 통해 표현하는 방법
+

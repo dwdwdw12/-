@@ -1,0 +1,28 @@
+log4j 설정
+1.  a) pom.xml에서 log4j 버전 수정
+    b) pom.xml에서 log4j2 dependency 추가
+
+2. src/main/resources에 log4jdbc.log4j2.properties 이름으로 파일 생성, 아래 내용 삽입
+	log4jdbc.spylogdelegator.name=net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator
+
+3. root-context.xml에서 hikariConfig 내부의 연결 정보 수정
+    기존)	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+	<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
+
+    변경)	<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+	<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:xe"></property> 
+
+4. log4j 로그 레벨 설정
+    src/test/resources/log4j.xml 내부에 아래 내용 추가하기
+
+	<logger name="jdbc.audit">
+		<level value="warn" />
+	</logger>
+	<logger name="jdbc.resultset">
+		<level value="warn" />
+	</logger>
+	<logger name="jdbc.connection">
+		<level value="warn" />
+	</logger>
+	
+    

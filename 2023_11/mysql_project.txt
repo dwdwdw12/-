@@ -1,0 +1,24 @@
+mysql
+0. 방화벽 설정
+
+1. 외부접속을 허용하는 계정 생성('계정이름'@'%').
+	CREATE USER 'project'@'%' IDENTIFIED BY 'project';	
+
+2. 해당 계정에 모든 권한은 부여한 뒤, flush를 사용해 확정함.	
+	GRANT ALL PRIVILEGES ON *.* TO 'project'@'%';
+	flush privileges;
+   
+   +. 스키마 생성(왼쪽 navigator>schemas에서 우클릭, create schema..)
+
+3. 접속. 생성한 스키마를 default schema를 정해야 원활하게 자료 열람 및 조작 가능.
+
+4. 오라클 데이터 import하기
+   a. 오라클의 데이터에 우클릭, 익스포트 선택. 익스포트 마법사에서 원하는 형식을 지정(xlsx)
+   b. xlsx를 csv(utf-8)로 변환.
+	b2. csv(utf-8)를 csv(그냥 csv)로 변환.
+   	c. 또는 csv to json 웹사이트를 이용하여 json 파일로 변환 
+   d. mysql에서 스키마 우클릭, data import wizard 실행.
+   e. csv 또는 json 파일을 선택하여 import. 인코딩 에러 주의
+   f. 조건 확인 후 마무리
+
+*date 타입은 원하는대로 import 되지 않음. text 타입으로 받거나, 추후에 쿼리문을 통해 고치는 방향으로.

@@ -1,0 +1,22 @@
+Mybatis 사용
+1. 설정은 Mybatis 설정, 설정2 파일 참고
+
+2. crud 사용시, #{...}형태로 삽입할 변수를 다룸
+
+2.5. <select> : resultType 필요.
+	       결과 타입이 단일 VO값이든, List<VO> 값이든, resultType에는 VO의 경로를 쓰기
+
+3. "", ; 사용하지 않음
+
+4. selectKey : 시퀀스와 같이, 자동으로 입력이 가능한 값은 콘솔창에서 확인이 불가능함. 
+	      selectKey를 사용시, 이 값을 확인할 수 있음
+	<insert id="insertSelectKey">
+		<selectKey keyProperty="bno" order="BEFORE" resultType="long">
+			select seq_board.nextval from dual
+		</selectKey>
+		insert into tbl_board(bno, title, content, writer) values(#{bno}, #{title}, #{content}, #{writer})
+	</insert>
+
+5. 인덱스를 고려하여 검색 성능을 향상시키는 방식도 있음
+	select * from tbl_board where bno>0
+	(bno가 기본키로, index를 가짐.)

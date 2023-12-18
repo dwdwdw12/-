@@ -1,0 +1,65 @@
+비동기 처리-ajax
+1. node.js 다운로드(LTS 버전)
+	-Visual Studio에서 상단 메뉴바-terminal-new terminal-java script 파일 입력시 해당 파일이 실행됨.
+
+2. 자바 스크립트 파일
+    var replyService =  (function(){			//즉시실행함수(익명 함수의 일종)의 변형
+    function add(reply, callback, error){
+        console.log("reply...");
+        $.ajax({
+            type : 'post',                                          //전송타입 유의. get/post/put/(patch)/delete 등
+            url : '/replies/new',
+            data : JSON.stringify(reply),		         //자바스크립트 값/객체를 json 문자열로 변환
+            contentType : "application/json; charset=utf-8",        //전송
+
+            success : function(result, status, xhr){                //전송 성공. 
+                if(callback){                   
+                    callback(result);                     //넘겨받은 함수
+                }
+            },
+            
+            error : function(xhr, status, er){                      //전송 실패
+                if(error){
+                    error(er);
+                }
+            }
+        });
+     }
+    .....
+     return {
+        add : add,					//replyService.add()를 통해 실행가능
+        getList : getList,
+        remove : remove,
+        update : update,
+        get : get
+    };
+})();
+
+3. jsp 파일
+   <script>	
+	var bnoValue = '${board.bno}';
+	
+	console.log('bnoValue : ' + bnoValue);
+
+//add
+	var addValue = {
+			reply : "JS TEST",
+			replyer : "TESTER", 
+			bno : bnoValue				//자바객체
+	}
+								//callback에 대응되는 함수
+	replyService.add(addValue, function(result) {	//json 타입으로 변환.
+		alert("RESULT : " + result)
+	});	//js의 replyService-add 호출 
+    </script>
+또는
+    //read, get
+    replyService.get(
+		41,					//데이터	
+		function(data) {				//성공-실행될 함수
+			console.log(data);			//없으면 null값 반환
+		},
+		function(err) {				//실패-실행될 함수
+			console.log(err);
+		}
+    );

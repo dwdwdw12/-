@@ -1,0 +1,31 @@
+AOP(Aspect Oriented Programming) 
+https://velog.io/@backtony/Spring-AOP-%EC%B4%9D%EC%A0%95%EB%A6%AC
+1. - 핵심 로직과 부가 기능을 분리해, 애플리케이션 전체에 걸쳐 사용되는 부가 기능을 모듈화하여 재사용할 수 있도록 지원하는 것.
+   - 관점(관심) 지향 프로그래밍 = 관심사 지향.
+   - 횡단 관심사의 코드를 핵심 비즈니스 로직의 코드와 분리하여 코드의 간결성을 높이고, 변경에 유연함과 무한한 확장이 가능하게 함.
+   - 로깅(logging. 로그인 아님...), 보안, 트랜잭션 등
+
+2. - Presentation Layer		=====	   =========	=======
+   - Business Layer			logging      Transaction	 Security
+   - Data Access Layer		=====      Management	=======
+
+3. 스프링 AOP는 AspectJ 문법을 차용, 프록시 방식의 AOP 제공.
+   요청을 프록시가 낚아채서, 먼처 처리함.
+
+4. AOP 용어
+   - advice : 프록시에서 실질적으로 수행하게 되는 로직을 정의. 
+   - join point : advice가 적용될 수 있는 모든 위치. 
+	        스프링 AOP는 프록시 방식을 사용하므로 조인 포인트는 항상 메서드 실행 지점
+   - pointcut : 조인 포인트 중에서 advice가 적용될 위치를 선별하는 기능
+   - target : advice의 대상이 되는 객체, pointcut으로 결정
+   - aspect : advice + pointcut을 모듈화한 것. = @Aspect
+   - advisor : advice + pointcut 한 쌍
+   - weaving : pointcut으로 결장한 타겟의 join point에 advice를 적용
+   - AOP 프록시 : AOP 기능을 구현하기 위해 만든 프록시 객체
+
+5. Advice 속성 지정
+   -@Before : 조인 포인트(메서드) 실행 이전에 실행.
+   -@After : 조인 포인트(메서드) 실행 이후에 실행. 어떤 결과가 나오든 실행됨.
+   -@AfterThrowing : 메서드가 예외를 던지는 경우 실행(예외 조작은 불가능).
+   -@AfterReturning : 조인포인트가 정상 완료 후, 반환값을 넘길 때 실행.
+   -@Around : 위의 네가지 어노테이션 모두 포함. 조인포인트 실행 전후에 동작하며, 동작여부, 반환값, 예외 등을 조작할 수 있음.

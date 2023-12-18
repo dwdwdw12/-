@@ -1,0 +1,20 @@
+h2 console
+create table board(
+   seq number(5) primary key,
+   title varchar2(200),
+   writer varchar2(20),
+   content varchar2(2000),
+   regdate date default now(),
+   cnt number(5) default 0
+);
+
+실행 : shift + enter
+오라클과 문법이 비슷함.
+
+pom.xml 파일에서 다음 내용 추가. 버전을 실제 사용하는 버전과 맞추어주기.
+<!-- H2 데이터베이스 -->
+	<dependency>
+		<groupId>com.h2database</groupId>
+		<artifactId>h2</artifactId>
+		<version>2.2.222</version>
+	</dependency>

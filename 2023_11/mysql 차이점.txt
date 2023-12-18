@@ -1,0 +1,21 @@
+mysql  차이점
+1. auto-increment
+   -oracle의 sequence에 대응, pk에 지정 가능하며, 테이블 생성시에 지정함.
+	bno int auto_increment primary key
+   -데이터 추가시 자동으로 증가
+
+2. 데이터 형식
+   -varchar : oracle의 varchar2
+   -datetime : oracle의 date
+   -current_timestamp : oracle의 sysdate
+
+3. paging 처리
+   -SELECT * FROM 테이블명 ORDERS LIMIT 숫자; 	
+	숫자 만큼의 행을 출력
+   -SELECT * FROM 테이블명 ORDERS LIMIT 숫자(A) OFFSET 숫자(B)
+	(B+1) 행 부터 A 행 만큼 출력을 합니다.
+   -SELECT * FROM 테이블명 ORDER LIMIT 숫자(A), 숫자(B)
+	(A+1)부터 B개의 행을 출력합니다.
+	숫자(A)가 OFFSET 과 동일
+   *SELECT * FROM 테이블명 WHERE 숫자(A) < key LIMIT 숫자(B)
+	OFFSET은 INDEX를 타지 않으니 대용량 데이터를 조회할 때 위와 같이 조회

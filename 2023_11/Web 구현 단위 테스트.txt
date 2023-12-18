@@ -1,0 +1,37 @@
+Web 구현 단위 테스트
+
+1. @ContextConfiguration에 root-context와 servlet-context를 등록.
+	@ContextConfiguration({"file:src/main/webapp/WEB-INF/spring/root-context.xml"
+			,"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml"})
+	각각 context가 service와 controller를 base-package로 가지고 있음. 
+
+2. 웹환경 테스트의 경우, 클래스 위에 @WebAppConfiguration 붙이기.
+
+3. @Autowired
+   private WebApplicationContext context;	//웹환경 테스트. 서버를 구동하지 않고 테스트
+	
+   private MockMvc mockMvc;	//가상서버
+
+4. @Before			//사전 동작. mockMvc 설정
+    public void setup() {
+	this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
+
+5. 테스트 시에 예외처리 하기(throw exception)
+
+6. 아래의 두 방식을 기억.
+   log.info(
+	mockMvc.perform(							
+		MockMvcRequestBuilders.get("/board/list"))	//요청
+		.andReturn()				//반환
+		.getModelAndView()			//model과 view를 함께 반환
+		.getModelMap()				//view 대신 값만 취해서 검토하겠다
+	);
+
+6.5 String resultPage = 
+		mockMvc.perform(
+			MockMvcRequestBuilders.post("/board/register")	//요청
+				.param("title", "mock title")		//전달할 값 설정							.param("content", "mock content")
+				.param("writer", "mock writer"))	
+			.andReturn()		//반환									.getModelAndView()	//model과 view를 함께 반환							.getViewName();		//view의 이름만 취하겠다.
+   * 위의 방식의 경우, VO 클래스에서 @Builder 아래에 @NoArgsConstructor 또는 @AllArgsConstructor 추가해야 mockMvc와 충돌하는 것을 회피할 수 있음
