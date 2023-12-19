@@ -1,0 +1,94 @@
+thymeleaf 용법
+
+1. 데이터 출력
+  th:text 사용 : <li><span th:text="${data}"></span></li>
+  컨텐츠 안에서 직접 출력하기 : <li>[[${data}]]</li>
+
+2. escape 문자 출력
+  text : 그대로 출력
+  utext : escape 문자 해석, 적용
+ 	<li>th:utext = <span th:utext="${data}"></span></li>
+  th:inline="none" : [[...]] 를 그대로 출력. 해당 태그 안에서는 [(${data})]와 같은 식으로 표현하기
+
+3. 표현식
+   -(단일 객체)
+   <span th:text="${user.username}"></span>
+   <span th:text="${user['username']}"></span>
+   <span th:text="${user.getUsername()}"></span>
+   -(배열, 리스트)
+   <span th:text="${users[0].username}"></span>
+   -(Map)
+   <span th:text="${userMap['userA'].username}"></span>
+
+   -지역변수 with
+   <div th:with="first=${users[0]}">
+       <span th:text="${first.username}"></span>
+   </div>
+
+4. 기본객체들(바로 접근 가능)
+   -${#response}, ${#request}, ${#session}, ${#servletContext}, ${#locale}
+   -편의객체들 : param(HTTP 요청 파라미터 접근), session(HTTP 세션 접근), @(스프링 빈 접근)
+	-기본객체로 접근하는 것이 더 복잡해질 경우에.
+
+5. 날짜
+   #temporals : 날짜용 유틸리티. 스프링 부트에서는 자동으로 추가.
+   ${#temporals.day(localDateTime)} : 날짜 관련 함수 사용 예시
+
+6. url 생성
+   <a th:href="@{/hello}"> -> /hello
+   <a th:href="@{/hello(param1=${param1}, param2=${param2})}"> -> /hello?param1=...&param2=...
+   <a th:href="@{/hello/{param1}/{param2}(param1=${param1}, param2=${param2})}"> -> /hello/.../...
+   <a th:href="@{/hello/{param1}(param1=${param1}, param2=${param2})}"> -> /hello/...?param2=...
+
+7. literal : 소스 코드 상에 고정된 값
+   문자 : 원칙적으로 작은 따옴표 사용해 감싸줌. 공백이 없을 경우, 작은 따옴표 생략 가능
+	<span th:text="hello world!">
+   아래와 같이 이어 붙일 수 있음
+   	<span th:text="'hello ' + ${data}">
+   작은 따옴표 대신 pipe 사용 가능
+	   <span th:text="|hello ${data}|">
+
+8. operation
+   산술연산 가능 ... <span th:text="10 + 2"> -> 12
+   비교연산-T/F 출력 : >(gt), <(lt), >=(ge), <=(le), ! (not), == (eq), != (neq, ne)
+   Elvis 연산자 ?:
+	${data}?: '데이터가 없습니다.' ->${}가 null이 아니라면 값을 표현, null이면 문구 출력.
+	${data}?: _  -> no-operation. ${}가 null이라면, 원래 있던 값을 출력. thymeleaf 값 무시
+
+9. attribute
+   th:attrappend, th:attrprepend, th:classappend : 사용시, 클래스에 속성 추가.
+   th:checked="true" / "false" : 체크박스 check 여부
+
+10. each
+   <tr th:each="user, userStat : ${users}">
+   user에서 객체의 정보를, userStat에서 index, size, count, even, firstm current 등의 정보 확인 가능
+   userStat은 자동으로 생성.
+
+11. condition
+   if, unless, switch~case문이 대표적
+	-th:if="${user.age lt 20}"
+	-th:unless="${user.age ge 20}"
+	-<td th:switch="${user.age}">
+            	<span th:case="10">10살</span>
+            	<span th:case="20">20살</span>
+        	 </td>
+
+12. comments
+   <!-- --> , <!--/*  */-->, <!--/*/ /*/--> 등
+
+13. block
+   타임리프의 자체 태그. each문 보완(결과마다 div 태그를 씌우고 싶다거나...).
+
+14. javascript
+   <script th:inline="javascript"> : 자바스크립트 인라인 기능.
+   인라인 사용x -> 객체의 toString() 메서드가 호출되어 문자 출력
+   인라인 사용 -> 자동으로 JSON 변환, 문자 타입에 "" 자동 사용(인라인x일 때는 직접 큰따옴표를 입력해야 함). 이스케이프 문자 자동 처리
+
+15. layout
+   gradle에 thymeleaf-layout-dialect 추가하기.
+   공통부분을 파일 조각으로 대체 가능(header, footer 등)
+	<div th:insert="~{template/fragment/footer :: copy}"></div>
+	<div th:replace="~{template/fragment/footer :: copy}"></div>
+	<head th:replace="template/layout/base :: common_header(~{::title},~{::link})">
+		->현재 파일에서, base 파일을 호출해, head를 통채로 바꾸겠다.
+

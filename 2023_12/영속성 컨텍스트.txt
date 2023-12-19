@@ -1,0 +1,36 @@
+영속성 컨텍스트(Persistence Context)
+
+1. ORM(Object Relational Mapping)
+   -객체와 DB 테이블을 매핑, 엔티티 클래스 객체 안에 포함된 정보를 테이블에 저장.
+   -SQL 언어가 아닌, 개발 언어로 DB에 접근가능하게 해줌.
+   -JPA(Java Persistence API) : Java에서 ORM 기술 표준으로 사용하는 인터페이스.
+
+2. Entity, Entity Manager, Entity Manager Factory
+   -Entity : DB 테이블에 대응. 필요에 따라, 하나의 테이블에 대응되는 여러 엔티티 클래스를 만들 수 있음(다루는 범위/필드가 다르다거나...)
+   -Entity manager : 엔티티를 관리. 엔티티 내부에 있는 영속성 컨텍스트를 통해서.
+   -EntityManagerFactory : Entity Manager를 관리. 요청이 들어오면 Entity Manager를 생성해줌.
+
+3. 영속성 컨텍스트 
+   -엔티티를 영구히 저장하는 환경. 애플리케이션과 DB 사이에서 객체 보관. 
+   -Entity Manager가 생성되면, 영속성 컨텍스트가 1대1로 생성
+
+4. 엔티티의 생명 주기(영속성 컨텍스트와의 관계 정도에 따라)
+   -비영속 : 영속성 컨텍스트와 관계 없음. 객체가 새로 생성되는 경우
+   -영속 : 영속성 컨텍스트에 관리되는 상태.
+	entityManager.persist(객체);
+   -준영속 : 영속성 컨텍스트에 저장되었다 분리된 상태
+	entityManager.detach(객체);
+   -삭제 : 실제 DB에서 삭제
+	entityManager.remove(객체);
+
+5. 영속성 컨텍스트의 특징
+   -엔티티를 식별자값(@Id, 기본키)으로 구분
+   -영속성 컨텍스트의 변경 내용을, flush()를 통해 DB에 반영.
+   -1차 캐시 : 영속 상태의 엔티티를 저장. 요청이 끝나면 삭제됨.
+   -동일성 보장 : 1차 캐시에 조회(find)한 내용을 저장. 새로운 조회 요청이 들어오면, 1차캐시에서 	해당 내용이 있는지 확인. 있으면 반환, 없으면 DB에서 조회 후 1차 캐시에 저장.
+   -쓰기 지연 : 쿼리를 DB에 바로 보내지 않고, 1차 캐시에 저장, 쓰기지연 SQL 저장소에 저장. 
+	       트랜잭션을 커밋하는 순간, DB에 반영됨
+   -변경 감지(Dirty Checking) : 트랜잭션을 커밋하면, flush()가 호출. 그 때, 엔티티와 1차 캐시 내의 스탭샷(최초 상태)를 비교. 변경된 부분이 있다면 update SQL문을 쓰기 지연 SQL 저장소에 저장. 
+			커밋을 하면 flush()가 호출, DB에 update문 실행
+				(update문 실행시, select로 조회 후 update 실행)
+   -지연 로딩 : 연관 관계가 매핑되어있는 엔티티 조회 시, 프록시를 반환, 쿼리를 정말 필요할 때 전송.
