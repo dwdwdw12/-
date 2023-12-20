@@ -28,3 +28,4 @@ https://velog.io/@sj_dev_js/HTML-DOM%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%
 * 참고) addEventListener("동작(click)", 함수, true/false)
 	true -> 캡쳐링 상태
 	false -> 버블링 상태
+		->캡쳐링 or 버블링 상태에서, 동작 발생시, 함수의 내용대로 처리
