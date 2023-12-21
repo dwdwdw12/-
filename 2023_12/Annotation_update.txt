@@ -142,6 +142,8 @@
 @RestControllerAdvice	-예외처리. @ControllerAdvice에 @ResponseBody가 붙은 모양. Json 처리.
 @ExceptionHandler	-@Controller, @RestController가 적용된 Bean내에서 발생하는 예외를 잡아서 하나의 메서드에서 처리
 @ResponseStatus(HttpStatus.ㅁㅁㅁ)	-예외가 발생할 때, 해당 HTTP 상태 코드를 조작.	
+@JsonFormat(pattern="...")	-json 처리 시 포맷팅 지정
+@JsonIgnore		-json 변환시 제외
 
 6. Swagger ui
 @Operation(summary = "Replies POST", description = "설명...")	-Controller의 특정 메서드를 Swagger에서 테스트할 때.

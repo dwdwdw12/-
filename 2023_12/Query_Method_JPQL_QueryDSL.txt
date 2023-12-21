@@ -1,0 +1,34 @@
+Query Method, JQPL, QueryDSL
+
+1. Query Method
+   -스프링 데이터 JPA에서 제공. 
+   -JpaRepository를 상속받은 repository interface에서, 간단한 문법으로 객체의 CRUD 수행
+   -ex) find + 엔티티 이름 + By + 변수이름
+   -keyword를 조합해 다양한 쿼리를 만들 수 있지만, 메서드명이 복잡해짐 
+	https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
+	
+2. JPQL
+   -@Query("...") 로 사용
+   -sql문과 유사. 쿼리문을 직접 문자로 작성
+   -오타로 인한 컴파일 에러를 확인할 수 없음
+   -예시) @Query("select r from Reply r where r.board.bno=:bno")
+	- * 대신 테이블의 별칭을 사용.
+	- ?, #{...} 대신 :칼럼명 사용
+   -파라미터 바인딩을 해야 함(@Param("bno") Long bno)
+   -nativeQuery = true 옵션을 이용해, sql 구문을 그대로 사용하는 방법도 있음
+	- @Query(value = "select * from board where title like %:title%", nativeQuery = true)
+   
+3. QueryDSL
+   -동적쿼리. 조건에 맞는 쿼리를 생성. 제약조건 조립 가능
+   -가독성 향상. 자동 완성 기능 이용 가능
+   -자바 코드로 이루어져 있음. 컴파일 시점에 오류 발견 가능
+   -용법
+	a) 관련 설정 도입(gradle, maven, pom.xml 등...), Q클래스 생성 확인
+	b) Repository에 QueryDslRepositoySupport 상속시킴
+	c) Q엔티티 선언(도메인 객체).
+   	d) BooleanBuilder, Where 다중 파라미터를 사용해 조건을 추가할 수 있음
+		-JPQLQuery를 도입해 사용할 수도 있음
+		-페이징 처리 지원(getQuerydsl().applyPagination())
+
+QueryDSL 용법은 아래 링크 참조
+https://velog.io/@simgyuhwan/%EC%BF%BC%EB%A6%AC-%EB%A9%94%EC%86%8C%EB%93%9C-JPQL-Querydsl-%EC%9A%94%EC%95%BD   
