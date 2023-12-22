@@ -104,6 +104,7 @@
 			-두 property 중, 중복되는 부분은 application-test.properties부터 적용. 나머지는 application.properties를 따름
 @Transactional		-하나의 작업 or 여러 작업을 하나의 작업 단위로 묶어 Commit or Rollback 처리가 필요할 때 사용
 	@Rollback(value = false)	-@Transactional은 연산이 끝난 후 Rollback 데이터를 rollback시킴. 이것을 취소하고 싶을 때.
+	@Commit 	-테스트 성공 후 DB에서도 업데이트 된 결과를 확인하고 싶을 때.
 @BeforeTestMethod/@BeforeTestClass	-전처리에 사용
 @Test			-Junit 테스트 지정
 @DisplayName("테스트 이름")	-테스트 이름 지정. 콘솔창에 표시됨.
