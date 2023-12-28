@@ -1,0 +1,31 @@
+*KAKAO LOGIN
+REST API KEY
+kakao developer에서 발급
+REDIRECT URI
+예시)http://localhost:8080/login/oauth2/code/kakao
+보안-CLIENT SECRET
+kakao developer에서 발급
+
+*인가코드(GET)
+https://kauth.kakao.com/oauth/authorize
+-필수항목
+client_id : rest key
+redirect_uri : REDIRECT URI
+response_type : code(고정)
+-전송 예시
+https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}
+
+*토큰 받기-Access token(POST)
+https://kauth.kakao.com/oauth/token
+-필수항목
+Content-type: application/x-www-form-urlencoded;charset=utf-8
+grant_type : authorization_code(고정)
+client_id : rest key
+redirect_uri : REDIRECT URI
+code : 전송받은 인가 코드
+
+*사용자 정보 가져오기(GET/POST)
+https://kapi.kakao.com/v2/user/me
+-요청: 액세스 토큰 방식 - 헤더
+Authorization : Bearer ${ACCESS_TOKEN}	<- 전송받은 access token
+Content-type: application/x-www-form-urlencoded;charset=utf-8
