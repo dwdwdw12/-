@@ -4,7 +4,7 @@
 @EqualsAndHashCode	-두 객체의 내부의 값이 같은지 숫자로 확인하는 값은 hashcode()이다
 			-같은 객체인지 확인하는 메소드는 equals()이다.
 @ToString		-출력시 주소값 대신, 객체가 가진 값을 문자열로 표현
-
+@Builder			-빌더 패턴으로 객체 생성. @NoArgsConstructor와 @AllArgsConstructor를 같이 써주는 것이 좋음.
 @NoArgsConstructor	-파라미터가 없는 기본 생성자를 생성
 @AllArgsConstructor	-모든 필드 값을 파라미터로 받는 생성자를 생성
 @RequiredArgsConstructor	-final이나 @NonNull인 필드 값만 파라미터로 받는 생성자를 생성
@@ -135,7 +135,7 @@
 			-DTO의 생성자에 @QueryProjection를 붙일 경우, DTO에 해당하는 QType이 생성됨.
 			-new QDTO로 결과에 매핑시키는 형태.
 			-런타임 에러뿐만 아니라 컴파일 시점에서도 에러를 잡아주고, 파라미터로도 확인할 수 있다는 장점이 있음.
-@Component	-등록된 빈 객체를 가져옴
+@Component		-등록된 빈 객체를 가져옴
 @Log			-로거를 생성.  자동으로 log 필드를 만들고, 해당 클래스의 이름으로 로거 객체를 생성하여 할당
 			-Logging : 오류 발생시 오류에 대한 기록을 남김.
 			-Log4j의 경우, DEBUG < INFO < WARN < ERROR <  FATAL 등의 로그레벨이 있고, 
