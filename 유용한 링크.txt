@@ -1,0 +1,38 @@
+기타 유용한 링크
+-인텔리제이에서 다이어그램 그리기
+https://www.jetbrains.com/help/idea/class-diagram.html
+
+-MyBatis document 
+https://mybatis.org/mybatis-3/ko/dynamic-sql.html
+
+-Git 연동(팀장/팀원)
+https://uni.rejoice-it.com/m/entry/STS3-Spring-legacy-project-Git-%EC%97%B0%EB%8F%99-%ED%8C%80%EC%9E%A5
+
+-AWS 배포-톰캣 부분
+https://ldgeao99-developer.tistory.com/576
+
+-CSV to JSON(mysql-data import 시에, 인코딩 에러가 발생할 경우)
+https://csvjson.com/csv2json
+
+-부트스트랩 아이콘(Try it으로 stylesheet 확인하기)
+https://www.w3schools.com/icons/icons_reference.asp
+
+-스프링 initializr
+https://start.spring.io/
+
+-JAVA document(8, 11, 17)
+https://docs.oracle.com/javase/8/docs/api/
+https://docs.oracle.com/en/java/javase/11/docs/api/index.html
+https://docs.oracle.com/en/java/javase/17/docs/api/index.html
+
+-Tomcat configuration
+https://tomcat.apache.org/tomcat-9.0-doc/jndi-datasource-examples-howto.html#Oracle_8i,_9i_&_10g
+
+-CSS 스타일 요소 모음
+https://inpa.tistory.com/category/Style%20Sheet/%EC%8A%A4%ED%83%80%EC%9D%BC%20%EC%9A%94%EC%86%8C%20%EB%AA%A8%EC%9D%8C
+
+-스프링 시큐리티 특강
+https://www.youtube.com/playlist?list=PL93mKxaRDidERCyMaobSLkvSPzYtIk0Ah
+
+-블랙숄즈 구현
+http://www.espenhaug.com/black_scholes.html
