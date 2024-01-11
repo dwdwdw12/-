@@ -1,0 +1,56 @@
+모던 자바스크립트로 배우는 리액트 입문
+
+*가상 DOM : 자바 스크립트 객체로 만들어진 가상의 DOM. 실제 DOM과의 차이를 비교해, 변경된 부분만을 실제 DOM에 반영. DOM 조작을 최소한으로 줄임.
+	리액트, vue 등 모던 자바스크립트 프레임워크/라이브러이에서는 가상 DOM을 제공
+	-페이지 이동은 자바스크립트의 화면 치환으로 구현. 렌더링 비용 최소화. 쾌적한 웹 시스템.
+
+*SPA 웹 시스템 : 하나의 HTML 파일 안에서, 자바스크립트를 이용해 DOM을 바꿔써서 화면 이동을 구현.
+
+*var : 덮어쓰기, 재선언 가능
+let : 덮어쓰기 가능. 재선언 불가능
+const : 덮어쓰기, 재선언 불가능(단, 객체, 배열, 함수 등의 오브젝트타입은 내부 값을 바꿀 수는 있음)
+
+*prettier : 코드 형태 정리 규칙 통일. 코드 포매팅 도구
+*ESLint : 정적 분석 도구, 코드의 문제점 확인 가능.
+
+*백틱(`) 사용 : 문자열 안에 변수(${...}) 삽입 가능. 함수 호출 가능.
+
+*배열 복사 
+-a) 등호(=) 사용 : 참조값을 상속. 복사된 배열이 바뀔 경우, 원본 배열도 같이 바뀜.
+-b) 스프레드 구문을 사용 : 완전히 새로운 배열을 생성.
+
+*화살표 함수 : 자바 람다식과 비슷
+map : 배열을 순서대로 처리. 두번째 인수에 index 넣어서 출력 가능.
+filter : 조건에 일치하는 값만 출력
+
+* || : 둘 중에 true 값 반환(왼쪽부터).
+  && : 왼쪽이 true이면 오른쪽 반환
+
+* truthy	: 암묵적으로 true로 판정(if("aaa"){~~~}). 예시) [ ](빈 배열), { }(빈 객체)
+  falsy	: 암묵적으로 false로 판정. 예시) 0, ""(빈 문자)
+  nullish	: null, undefined로 판정. ?? 연산자(좌항이 null, undefined라면 우항의 값을 반환)
+
+*document.getElementById()
+document.querySelector() : 일치하는 첫번째 요소(id(#), class(.))
+document.getElemenstByClassName() : HttpCollection 반환
+document.querySelectorAll() : NodeList 반환
+
+*DOM 작성
+document.createElement() : 괄호 안에는 존재하는 태그를 사용하기. <div></div> 꼴 반환
+*DOM 추가 : appendChild()
+*DOM 삭제 : removeChild() 또는 textContent = null
+
+*Props, State
+Props : 텀포넌트에 전달하는 인수. 컴포넌트는 전달받은 Props에 따라 표시되는 스타일과 내용 변경
+Props를 destructure : 분할대입
+State : 컴포넌트의 상태를 나타냄(에러여부, 버튼 클릭 여부 등등)
+
+*재렌더링
+변경을 감지하고 컴포넌트를 다시 처리
+-리액트 훅
+useState : State 변수와 State를 업데이트하기 위한 함수를 설정.
+useEffect : 부작용. 어떤 값이 변했을 때에 한해서만 어떤 처리를 실행
+
+*export 종류
+normal export
+default export : {...} 없이 import 가능
