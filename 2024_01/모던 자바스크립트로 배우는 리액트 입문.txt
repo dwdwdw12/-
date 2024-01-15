@@ -40,6 +40,15 @@ document.createElement() : 괄호 안에는 존재하는 태그를 사용하기.
 *DOM 추가 : appendChild()
 *DOM 삭제 : removeChild() 또는 textContent = null
 
+ch04)
+*리액트 생성
+VS Code에서 폴더 열기
+ctrl+j 로 터미널 접근
+npx create-react-app [프로젝트명]
+cd 프로젝트명
+npm start
+		//에러나면 폴더가 생성되어 있는지 확인
+
 *Props, State
 Props : 텀포넌트에 전달하는 인수. 컴포넌트는 전달받은 Props에 따라 표시되는 스타일과 내용 변경
 Props를 destructure : 분할대입
@@ -54,3 +63,25 @@ useEffect : 부작용. 어떤 값이 변했을 때에 한해서만 어떤 처리
 *export 종류
 normal export
 default export : {...} 없이 import 가능
+
+ch05)
+*인라인 스타일
+CSS 모듈
+-터미널에서 npm install -s node-sass		//-s가 없으면 error. 실행시 에러나면 재설치하기(npm install sass).
+-styled jsx
+-Next.js : 리액트 기반 프레임워크. 성능이 뛰어남
+
+*리액트 css 라이브러리
+-styled components : 스타일을 적용한 컴포넌트를 정의할 수 있음
+npm install styled-components
+-Emotion : 다양한 사용방법을 제공. 선호하는 작성 방식을 이용할 수 있지만, 유지보수성이 낮아질 수도 있음
+npm install @emotion/react @emotion/styled
+-Tailwind CSS : 유틸리티 우선(utility first) 프레임워크. flex, text-center와 같이 className에 설정할 수 있는 클래스명의 부품만 제공. 이것을 조합해 사용 가능
+npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
+npm install @craco/craco
+
+npx tailwindcss init
+npm install -D tailwindcss
+
+@tailwind 에러 -> PostCSS Language Support 설치하기
+*tailwind 적용 안됨...
